@@ -29,14 +29,13 @@ import (
 // but is also doesn't need the extra information, only the pure data (and is not decoded)
 // ... The same applies to V1 & V1, if we have a V4, carry move this comment to latest
 type ExtrinsicPayloadV3 struct {
-	Method                   BytesBare
-	Era                      ExtrinsicEra // extra via system::CheckEra
-	Nonce                    UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
-	Tip                      UCompact     // extra via balances::TakeFees (Compact<Balance> where Balance is u128)
-	SpecVersion              U32          // additional via system::CheckVersion
-	GenesisHash              Hash         // additional via system::CheckGenesis
-	BlockHash                Hash         // additional via system::CheckEra
-	ChargeTransactionPayment ChargeTransactionPayment
+	Method      BytesBare
+	Era         ExtrinsicEra // extra via system::CheckEra
+	Nonce       UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
+	SpecVersion U32          // additional via system::CheckVersion
+	GenesisHash Hash         // additional via system::CheckGenesis
+	BlockHash   Hash         // additional via system::CheckEra
+	Donut       OptionBytes
 }
 
 // Sign the extrinsic payload with the given derivation path
@@ -53,7 +52,24 @@ func (e ExtrinsicPayloadV3) Sign(signer signature.KeyringPair) (Signature, error
 // Encode implements encoding for ExtrinsicPayloadV3, which just unwraps the bytes of ExtrinsicPayloadV3 without
 // adding a compact length prefix
 func (e ExtrinsicPayloadV3) Encode(encoder scale.Encoder) error {
-	err := encoder.Encode(e.Method)
+	err := encoder.Encode(e.BlockHash)
+	if err != nil {
+		return err
+	}
+
+	err = encoder.Encode(e.Donut)
+	if err != nil {
+		return err
+	}
+
+	err = encoder.Encode(e.Donut)
+	if err != nil {
+		return err
+	}
+
+	//
+
+	err = encoder.Encode(e.Method)
 	if err != nil {
 		return err
 	}
@@ -64,11 +80,6 @@ func (e ExtrinsicPayloadV3) Encode(encoder scale.Encoder) error {
 	}
 
 	err = encoder.Encode(e.Nonce)
-	if err != nil {
-		return err
-	}
-
-	err = encoder.Encode(e.Tip)
 	if err != nil {
 		return err
 	}
@@ -84,6 +95,11 @@ func (e ExtrinsicPayloadV3) Encode(encoder scale.Encoder) error {
 	}
 
 	err = encoder.Encode(e.BlockHash)
+	if err != nil {
+		return err
+	}
+
+	err = encoder.Encode(e.ChargeTransactionPayment)
 	if err != nil {
 		return err
 	}

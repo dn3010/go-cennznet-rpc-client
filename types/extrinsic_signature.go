@@ -25,21 +25,22 @@ type ExtrinsicSignatureV3 struct {
 }
 
 type ExtrinsicSignatureV4 struct {
-	Signer                  Address
-	Signature               MultiSignature
-	Era                     ExtrinsicEra // extra via system::CheckEra
-	Nonce                   UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32))
-	ChargeTransactionPaymet ChargeTransactionPayment
+	Era       ExtrinsicEra // extra via system::CheckEra
+	Donut     OptionBytes
+	Nonce     UCompact // extra via system::CheckNonce (Compact<Index> where Index is u32))
+	Signer    Address
+	Signature MultiSignature
+	Tip       UCompact
 }
 
 type SignatureOptions struct {
-	Era                      ExtrinsicEra // extra via system::CheckEra
-	Nonce                    UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
-	SpecVersion              U32          // additional via system::CheckSpecVersion
-	GenesisHash              Hash         // additional via system::CheckGenesis
-	BlockHash                Hash         // additional via system::CheckEra
-	TransactionVersion       U32          // additional via system::CheckTxVersion
-	ChargeTransactionPayment ChargeTransactionPayment
+	// Era                      ExtrinsicEra // extra via system::CheckEra
+	// Nonce                    UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
+	SpecVersion U32  // additional via system::CheckSpecVersion
+	GenesisHash Hash // additional via system::CheckGenesis
+	BlockHash   Hash // additional via system::CheckEra
+	// TransactionVersion       U32  // additional via system::CheckTxVersion
+	// ChargeTransactionPayment ChargeTransactionPayment
 }
 
 type ChargeTransactionPayment struct {
