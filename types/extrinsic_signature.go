@@ -25,19 +25,29 @@ type ExtrinsicSignatureV3 struct {
 }
 
 type ExtrinsicSignatureV4 struct {
-	Signer    Address
-	Signature MultiSignature
-	Era       ExtrinsicEra // extra via system::CheckEra
-	Nonce     UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32))
-	Tip       UCompact     // extra via balances::TakeFees (Compact<Balance> where Balance is u128))
+	Signer                  Address
+	Signature               MultiSignature
+	Era                     ExtrinsicEra // extra via system::CheckEra
+	Nonce                   UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32))
+	ChargeTransactionPaymet ChargeTransactionPayment
 }
 
 type SignatureOptions struct {
-	Era                ExtrinsicEra // extra via system::CheckEra
-	Nonce              UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
-	Tip                UCompact     // extra via balances::TakeFees (Compact<Balance> where Balance is u128)
-	SpecVersion        U32          // additional via system::CheckSpecVersion
-	GenesisHash        Hash         // additional via system::CheckGenesis
-	BlockHash          Hash         // additional via system::CheckEra
-	TransactionVersion U32          // additional via system::CheckTxVersion
+	Era                      ExtrinsicEra // extra via system::CheckEra
+	Nonce                    UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
+	SpecVersion              U32          // additional via system::CheckSpecVersion
+	GenesisHash              Hash         // additional via system::CheckGenesis
+	BlockHash                Hash         // additional via system::CheckEra
+	TransactionVersion       U32          // additional via system::CheckTxVersion
+	ChargeTransactionPayment ChargeTransactionPayment
+}
+
+type ChargeTransactionPayment struct {
+	Tip         U128
+	FeeExchange FeeExchange
+}
+
+type FeeExchange struct {
+	AssetID    U64
+	MaxPayment U128
 }

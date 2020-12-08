@@ -137,13 +137,13 @@ func (e *Extrinsic) Sign(signer signature.KeyringPair, o SignatureOptions) error
 
 	payload := ExtrinsicPayloadV4{
 		ExtrinsicPayloadV3: ExtrinsicPayloadV3{
-			Method:      mb,
-			Era:         era,
-			Nonce:       o.Nonce,
-			Tip:         o.Tip,
-			SpecVersion: o.SpecVersion,
-			GenesisHash: o.GenesisHash,
-			BlockHash:   o.BlockHash,
+			Method:                   mb,
+			Era:                      era,
+			Nonce:                    o.Nonce,
+			SpecVersion:              o.SpecVersion,
+			GenesisHash:              o.GenesisHash,
+			BlockHash:                o.BlockHash,
+			ChargeTransactionPayment: o.ChargeTransactionPayment,
 		},
 		TransactionVersion: o.TransactionVersion,
 	}
@@ -156,11 +156,11 @@ func (e *Extrinsic) Sign(signer signature.KeyringPair, o SignatureOptions) error
 	}
 
 	extSig := ExtrinsicSignatureV4{
-		Signer:    signerPubKey,
-		Signature: MultiSignature{IsSr25519: true, AsSr25519: sig},
-		Era:       era,
-		Nonce:     o.Nonce,
-		Tip:       o.Tip,
+		Signer:                  signerPubKey,
+		Signature:               MultiSignature{IsSr25519: true, AsSr25519: sig},
+		Era:                     era,
+		Nonce:                   o.Nonce,
+		ChargeTransactionPaymet: o.ChargeTransactionPayment,
 	}
 
 	e.Signature = extSig

@@ -29,13 +29,14 @@ import (
 // but is also doesn't need the extra information, only the pure data (and is not decoded)
 // ... The same applies to V1 & V1, if we have a V4, carry move this comment to latest
 type ExtrinsicPayloadV3 struct {
-	Method      BytesBare
-	Era         ExtrinsicEra // extra via system::CheckEra
-	Nonce       UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
-	Tip         UCompact     // extra via balances::TakeFees (Compact<Balance> where Balance is u128)
-	SpecVersion U32          // additional via system::CheckVersion
-	GenesisHash Hash         // additional via system::CheckGenesis
-	BlockHash   Hash         // additional via system::CheckEra
+	Method                   BytesBare
+	Era                      ExtrinsicEra // extra via system::CheckEra
+	Nonce                    UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
+	Tip                      UCompact     // extra via balances::TakeFees (Compact<Balance> where Balance is u128)
+	SpecVersion              U32          // additional via system::CheckVersion
+	GenesisHash              Hash         // additional via system::CheckGenesis
+	BlockHash                Hash         // additional via system::CheckEra
+	ChargeTransactionPayment ChargeTransactionPayment
 }
 
 // Sign the extrinsic payload with the given derivation path
@@ -127,11 +128,6 @@ func (e ExtrinsicPayloadV4) Encode(encoder scale.Encoder) error {
 		return err
 	}
 
-	err = encoder.Encode(e.Tip)
-	if err != nil {
-		return err
-	}
-
 	err = encoder.Encode(e.SpecVersion)
 	if err != nil {
 		return err
@@ -148,6 +144,11 @@ func (e ExtrinsicPayloadV4) Encode(encoder scale.Encoder) error {
 	}
 
 	err = encoder.Encode(e.BlockHash)
+	if err != nil {
+		return err
+	}
+
+	err = encoder.Encode(e.ChargeTransactionPayment)
 	if err != nil {
 		return err
 	}
