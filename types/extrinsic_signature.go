@@ -23,13 +23,21 @@ type SignedExtraPayload struct {
 }
 
 type ExtrinsicSignatureV1 struct {
-	Signer    Address
-	Signature MultiSignature
-	Doughnut  OptionBytes
-	Era       ExtrinsicEra // extra via system::CheckEra
-	Nonce     UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32))
-	Tip       UCompact     // extra via balances::TakeFees (Compact<Balance> where Balance is u128))
+	Signer             Address
+	Signature          MultiSignature
+	Era                ExtrinsicEra // extra via system::CheckEra
+	Nonce              UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32))
+	TransactionPayment TransactionPayment
 }
+
+// type ExtrinsicSignatureV1 struct {
+// 	Signer    Address
+// 	Signature MultiSignature
+// 	Doughnut  OptionBytes
+// 	Era       ExtrinsicEra // extra via system::CheckEra
+// 	Nonce     UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32))
+// 	Tip       TransactionPayment
+// }
 
 type SignatureOptions struct {
 	Era         ExtrinsicEra // extra via system::CheckEra

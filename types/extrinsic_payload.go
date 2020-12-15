@@ -48,30 +48,30 @@ type TransactionPayment struct {
 
 type OptionFeeExchange struct {
 	HasValue    bool
-	FeeExchange FeeExchangeV1
+	FeeExchange FeeExchange
 }
+
+type FeeExchange struct {
+	IsFeeExchangeV1 bool
+	AsFeeExchangeV1 FeeExchangeV1
+}
+
 type FeeExchangeV1 struct {
-	AssetId    UCompact
+	AssetID    UCompact
 	MaxPayment UCompact
 }
 
-func (fe FeeExchangeV1) Encode(encoder scale.Encoder) error {
-	err := encoder.PushByte(0)
-	if err != nil {
-		return err
+func (fe FeeExchange) Encode(encoder scale.Encoder) error {
+	if fe.IsFeeExchangeV1 {
+		err := encoder.PushByte(0)
+		if err != nil {
+			return err
+		}
+
+		return encoder.Encode(fe.AsFeeExchangeV1)
 	}
 
-	err = encoder.Encode(fe.AssetId)
-	if err != nil {
-		return err
-	}
-
-	err = encoder.Encode(fe.MaxPayment)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	panic("Only FeeExchangeV1 is supported")
 }
 
 func (fe OptionFeeExchange) Encode(encoder scale.Encoder) error {
@@ -90,11 +90,7 @@ func (e ExtrinsicPayloadV1) Sign(signer signature.KeyringPair) (Signature, error
 		return Signature{}, err
 	}
 
-	hex, err := EncodeToHexString(b)
-	if err != nil {
-		panic(err)
-	}
-	println("BUF", hex)
+	println(fmt.Sprintf("BUF  %#x", b))
 
 	sig, err := signature.Sign(b, signer.URI)
 	return NewSignature(sig), err

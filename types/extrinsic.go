@@ -138,10 +138,20 @@ func (e *Extrinsic) Sign(signer signature.KeyringPair, o SignatureOptions) error
 	payload := ExtrinsicPayloadV1{
 		Method: mb,
 		// Doughnut:           o.Doughnut,
-		Era:   era,
-		Nonce: o.Nonce,
+		Era:                era,
+		Nonce:              o.Nonce,
 		TransactionPayment: TransactionPayment{
-			Tip: o.Tip,
+			// Tip: o.Tip,
+			// FeeExchange: OptionFeeExchange{
+			// 	HasValue: true,
+			// 	FeeExchange: FeeExchange{
+			// 		IsFeeExchangeV1: true,
+			// 		AsFeeExchangeV1: FeeExchangeV1{
+			// 			AssetID:    NewUCompactFromUInt(4),
+			// 			MaxPayment: NewUCompactFromUInt(1_000),
+			// 		},
+			// 	},
+			// },
 		},
 		SpecVersion:        o.SpecVersion,
 		TransactionVersion: 5,
@@ -157,11 +167,11 @@ func (e *Extrinsic) Sign(signer signature.KeyringPair, o SignatureOptions) error
 	}
 
 	extSig := ExtrinsicSignatureV1{
-		Signer:    signerPubKey,
-		Signature: MultiSignature{IsSr25519: true, AsSr25519: sig},
-		Era:       era,
-		Nonce:     o.Nonce,
-		Tip:       o.Tip,
+		Signer:             signerPubKey,
+		Signature:          MultiSignature{IsSr25519: true, AsSr25519: sig},
+		Era:                era,
+		Nonce:              payload.Nonce,
+		TransactionPayment: payload.TransactionPayment,
 	}
 
 	e.Signature = extSig
