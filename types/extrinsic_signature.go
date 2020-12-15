@@ -16,12 +16,6 @@
 
 package types
 
-type SignedExtraPayload struct {
-	SpecVersion U32
-	GenesisHash Hash
-	BlockHash   Hash
-}
-
 type ExtrinsicSignatureV1 struct {
 	Signer             Address
 	Signature          MultiSignature
@@ -30,21 +24,11 @@ type ExtrinsicSignatureV1 struct {
 	TransactionPayment TransactionPayment
 }
 
-// type ExtrinsicSignatureV1 struct {
-// 	Signer    Address
-// 	Signature MultiSignature
-// 	Doughnut  OptionBytes
-// 	Era       ExtrinsicEra // extra via system::CheckEra
-// 	Nonce     UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32))
-// 	Tip       TransactionPayment
-// }
-
 type SignatureOptions struct {
-	Era         ExtrinsicEra // extra via system::CheckEra
-	Doughnut    OptionBytes
-	Nonce       UCompact // extra via system::CheckNonce (Compact<Index> where Index is u32)
-	Tip         UCompact // extra via balances::TakeFees (Compact<Balance> where Balance is u128)
-	SpecVersion U32      // additional via system::CheckSpecVersion
-	GenesisHash Hash     // additional via system::CheckGenesis
-	BlockHash   Hash     // additional via system::CheckEra
+	Era                ExtrinsicEra       // extra via system::CheckEra
+	Nonce              UCompact           // extra via system::CheckNonce (Compact<Index> where Index is u32)
+	TransactionPayment TransactionPayment // extra via crml_transaction_payment::ChargeTransactionPayment
+	SpecVersion        U32                // additional via system::CheckSpecVersion
+	GenesisHash        Hash               // additional via system::CheckGenesis
+	BlockHash          Hash               // additional via system::CheckEra
 }

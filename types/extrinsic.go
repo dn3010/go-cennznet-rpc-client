@@ -38,6 +38,7 @@ const (
 	ExtrinsicVersion2       = 2
 	ExtrinsicVersion3       = 3
 	ExtrinsicVersion4       = 4
+	TransactionVersion      = 5
 )
 
 // Extrinsic is a piece of Args bundled into a block that expresses something from the "external" (i.e. off-chain)
@@ -136,25 +137,12 @@ func (e *Extrinsic) Sign(signer signature.KeyringPair, o SignatureOptions) error
 	}
 
 	payload := ExtrinsicPayloadV1{
-		Method: mb,
-		// Doughnut:           o.Doughnut,
+		Method:             mb,
 		Era:                era,
 		Nonce:              o.Nonce,
-		TransactionPayment: TransactionPayment{
-			// Tip: o.Tip,
-			// FeeExchange: OptionFeeExchange{
-			// 	HasValue: true,
-			// 	FeeExchange: FeeExchange{
-			// 		IsFeeExchangeV1: true,
-			// 		AsFeeExchangeV1: FeeExchangeV1{
-			// 			AssetID:    NewUCompactFromUInt(4),
-			// 			MaxPayment: NewUCompactFromUInt(1_000),
-			// 		},
-			// 	},
-			// },
-		},
+		TransactionPayment: o.TransactionPayment,
 		SpecVersion:        o.SpecVersion,
-		TransactionVersion: 5,
+		TransactionVersion: TransactionVersion,
 		GenesisHash:        o.GenesisHash,
 		BlockHash:          o.BlockHash,
 	}
@@ -346,16 +334,3 @@ func (a *Args) Decode(decoder scale.Decoder) error {
 }
 
 type Justification Bytes
-
-type SignaturePayload struct {
-	Address        Address
-	BlockHash      Hash
-	BlockNumber    BlockNumber
-	Era            ExtrinsicEra
-	GenesisHash    Hash
-	Method         Call
-	Nonce          UCompact
-	RuntimeVersion RuntimeVersion
-	Tip            UCompact
-	Version        uint8
-}

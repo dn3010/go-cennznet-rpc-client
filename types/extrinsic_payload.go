@@ -61,28 +61,6 @@ type FeeExchangeV1 struct {
 	MaxPayment UCompact
 }
 
-func (fe FeeExchange) Encode(encoder scale.Encoder) error {
-	if fe.IsFeeExchangeV1 {
-		err := encoder.PushByte(0)
-		if err != nil {
-			return err
-		}
-
-		return encoder.Encode(fe.AsFeeExchangeV1)
-	}
-
-	panic("Only FeeExchangeV1 is supported")
-}
-
-func (fe OptionFeeExchange) Encode(encoder scale.Encoder) error {
-	err := encoder.EncodeOption(fe.HasValue, fe.FeeExchange)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // Sign the extrinsic payload with the given derivation path
 func (e ExtrinsicPayloadV1) Sign(signer signature.KeyringPair) (Signature, error) {
 	b, err := EncodeToBytes(e)
@@ -90,57 +68,31 @@ func (e ExtrinsicPayloadV1) Sign(signer signature.KeyringPair) (Signature, error
 		return Signature{}, err
 	}
 
-	println(fmt.Sprintf("BUF  %#x", b))
-
 	sig, err := signature.Sign(b, signer.URI)
 	return NewSignature(sig), err
 }
 
-// func (e ExtrinsicPayloadV1) Encode(encoder scale.Encoder) error {
-// 	err := encoder.Encode(e.Method)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = encoder.Encode(e.Era)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = encoder.Encode(e.Nonce)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = encoder.Encode(e.TransactionPayment)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = encoder.Encode(e.SpecVersion)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = encoder.Encode(e.TransactionVersion)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = encoder.Encode(e.GenesisHash)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = encoder.Encode(e.BlockHash)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	return nil
-// }
-
 // Decode does nothing and always returns an error. ExtrinsicPayloadV1 is only used for encoding, not for decoding
 func (e *ExtrinsicPayloadV1) Decode(decoder scale.Decoder) error {
 	return fmt.Errorf("decoding of ExtrinsicPayloadV1 is not supported")
+}
+
+func (fe OptionFeeExchange) Encode(encoder scale.Encoder) error {
+	err := encoder.EncodeOption(fe.HasValue, fe.FeeExchange)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (fe FeeExchange) Encode(encoder scale.Encoder) error {
+	switch {
+	case fe.IsFeeExchangeV1:
+		if err := encoder.PushByte(0); err != nil {
+			return err
+		}
+		return encoder.Encode(fe.AsFeeExchangeV1)
+	}
+
+	panic("Only FeeExchangeV1 is supported")
 }
