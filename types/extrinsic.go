@@ -38,6 +38,7 @@ const (
 	ExtrinsicVersion2       = 2
 	ExtrinsicVersion3       = 3
 	ExtrinsicVersion4       = 4
+	TransactionVersion      = 5
 )
 
 // Extrinsic is a piece of Args bundled into a block that expresses something from the "external" (i.e. off-chain)
@@ -47,7 +48,7 @@ type Extrinsic struct {
 	// Version is the encoded version flag (which encodes the raw transaction version and signing information in one byte)
 	Version byte
 	// Signature is the ExtrinsicSignatureV4, it's presence depends on the Version flag
-	Signature ExtrinsicSignatureV4
+	Signature ExtrinsicSignatureV1
 	// Method is the call this extrinsic wraps
 	Method Call
 }
@@ -135,17 +136,15 @@ func (e *Extrinsic) Sign(signer signature.KeyringPair, o SignatureOptions) error
 		era = ExtrinsicEra{IsImmortalEra: true}
 	}
 
-	payload := ExtrinsicPayloadV4{
-		ExtrinsicPayloadV3: ExtrinsicPayloadV3{
-			Method:      mb,
-			Era:         era,
-			Nonce:       o.Nonce,
-			Tip:         o.Tip,
-			SpecVersion: o.SpecVersion,
-			GenesisHash: o.GenesisHash,
-			BlockHash:   o.BlockHash,
-		},
-		TransactionVersion: o.TransactionVersion,
+	payload := ExtrinsicPayloadV1{
+		Method:             mb,
+		Era:                era,
+		Nonce:              o.Nonce,
+		TransactionPayment: o.TransactionPayment,
+		SpecVersion:        o.SpecVersion,
+		TransactionVersion: TransactionVersion,
+		GenesisHash:        o.GenesisHash,
+		BlockHash:          o.BlockHash,
 	}
 
 	signerPubKey := NewAddressFromAccountID(signer.PublicKey)
@@ -155,12 +154,12 @@ func (e *Extrinsic) Sign(signer signature.KeyringPair, o SignatureOptions) error
 		return err
 	}
 
-	extSig := ExtrinsicSignatureV4{
-		Signer:    signerPubKey,
-		Signature: MultiSignature{IsSr25519: true, AsSr25519: sig},
-		Era:       era,
-		Nonce:     o.Nonce,
-		Tip:       o.Tip,
+	extSig := ExtrinsicSignatureV1{
+		Signer:             signerPubKey,
+		Signature:          MultiSignature{IsSr25519: true, AsSr25519: sig},
+		Era:                era,
+		Nonce:              payload.Nonce,
+		TransactionPayment: payload.TransactionPayment,
 	}
 
 	e.Signature = extSig
@@ -335,16 +334,3 @@ func (a *Args) Decode(decoder scale.Decoder) error {
 }
 
 type Justification Bytes
-
-type SignaturePayload struct {
-	Address        Address
-	BlockHash      Hash
-	BlockNumber    BlockNumber
-	Era            ExtrinsicEra
-	GenesisHash    Hash
-	Method         Call
-	Nonce          UCompact
-	RuntimeVersion RuntimeVersion
-	Tip            UCompact
-	Version        uint8
-}
