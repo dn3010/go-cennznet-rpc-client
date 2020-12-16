@@ -1,4 +1,4 @@
-# Go Substrate RPC Client (GSRPC)
+# Go CENNZnet RPC Client (GCRPC)
 
 [![License: Apache v2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GoDoc Reference](https://godoc.org/github.com/centrifuge/go-substrate-rpc-client?status.svg)](https://godoc.org/github.com/centrifuge/go-substrate-rpc-client)
@@ -6,8 +6,9 @@
 [![codecov](https://codecov.io/gh/centrifuge/go-substrate-rpc-client/branch/master/graph/badge.svg)](https://codecov.io/gh/centrifuge/go-substrate-rpc-client)
 [![Go Report Card](https://goreportcard.com/badge/github.com/centrifuge/go-substrate-rpc-client)](https://goreportcard.com/report/github.com/centrifuge/go-substrate-rpc-client)
 
-Substrate RPC client in Go. It provides APIs and types around Polkadot and any Substrate-based chain RPC calls.
-This client is modelled after [polkadot-js/api](https://github.com/polkadot-js/api).
+CENNZnet RPC client in Go.
+This is a fork of [go-substrate-rpc-client](https://github.com/centrifuge/go-substrate-rpc-client) which adds support for making CENNZnet transactions
+and is modelled after [cennznet/api.js](https://github.com/cennznet/api.js).
 
 ## State
 
