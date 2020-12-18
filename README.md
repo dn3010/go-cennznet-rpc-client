@@ -29,17 +29,17 @@ Please refer to https://godoc.org/github.com/centrifuge/go-substrate-rpc-client
 1. Run tests `make test`
 1. Lint `make lint` (you can use `make lint-fix` to automatically fix issues)
 
-## Run tests in a Docker container against the Substrate Default Docker image
+## Run tests in a Docker container against the CENNZnet Docker image
 
 1. Run the docker container `make test-dockerized`
 
-## Run tests locally against the Substrate Default Docker image
+## Run tests locally against the CENNZnet Docker image
 
-1. Start the Substrate Default Docker image: `make run-substrate-docker`
+1. Start the Substrate Default Docker image: `make run-cennznet-docker`
 1. In another terminal, run the tests against that image: `make test`
 1. Visit https://polkadot.js.org/apps for inspection
 
-## Run tests locally against any substrate endpoint
+## Run tests locally against any CENNZnet endpoint
 
 1. Set the endpoint: `export RPC_URL="http://example.com:9933"`
 1. Run the tests `make test`

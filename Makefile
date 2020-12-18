@@ -36,7 +36,7 @@ test-cover: 			## runs all tests in project against the RPC URL specified in the
 	@go test -race -coverprofile=coverage.txt -covermode=atomic `go list ./... | grep -v '/gethrpc'`
 	@mv coverage.txt shared
 
-test-dockerized: 		## runs all tests in a docker container against the Substrate Default Docker image
+test-dockerized: 		## runs all tests in a docker container against the CENNZnet Docker image
 	@docker-compose build
 	@docker-compose up --abort-on-container-exit
 
@@ -45,8 +45,8 @@ test-e2e-deployed: 		## runs only end-to-end (e2e) tests against a deployed test
 	@docker build . -t gsrpc-test
 	@docker run --rm -e RPC_URL -e TEST_PRIV_KEY gsrpc-test go test -v github.com/centrifuge/go-substrate-rpc-client/teste2e
 
-run-substrate-docker: 	## runs the Substrate 2.0 Default Docker image, this can be used to run the tests
-	docker run -p 9933:9933 -p 9944:9944 -p 30333:30333 parity/substrate:v2.0.0 --dev --rpc-external --ws-external
+run-cennznet-docker: 	## runs CENNZnet 1.2.2 Docker image, this can be used to run the tests
+	docker run -p 9933:9933 -p 9944:9944 -p 30333:30333 cennznet/cennznet:v1.2.2 --dev --rpc-external --ws-external
 
 help: 				## shows this help
 	@sed -ne '/@sed/!s/## //p' $(MAKEFILE_LIST)
