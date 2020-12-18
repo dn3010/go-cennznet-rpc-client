@@ -78,9 +78,17 @@ func (e *ExtrinsicPayloadV1) Decode(decoder scale.Decoder) error {
 }
 
 func (fe OptionFeeExchange) Encode(encoder scale.Encoder) error {
-	err := encoder.EncodeOption(fe.HasValue, fe.FeeExchange)
+	return encoder.EncodeOption(fe.HasValue, fe.FeeExchange)
+}
+
+func (fe *OptionFeeExchange) Decode(decoder scale.Decoder) error {
+	flag, err := decoder.ReadOneByte()
 	if err != nil {
 		return err
+	}
+	fe.HasValue = flag == 0x01
+	if fe.HasValue {
+		return fe.FeeExchange.Decode(decoder)
 	}
 	return nil
 }
@@ -95,4 +103,24 @@ func (fe FeeExchange) Encode(encoder scale.Encoder) error {
 	}
 
 	panic("Only FeeExchangeV1 is supported")
+}
+
+func (fe *FeeExchange) Decode(decoder scale.Decoder) error {
+	flag, err := decoder.ReadOneByte()
+	if err != nil {
+		return err
+	}
+	switch flag {
+	case 0x00:
+		fe.IsFeeExchangeV1 = true
+		return fe.AsFeeExchangeV1.Decode(decoder)
+	}
+	return nil
+}
+
+func (fe *FeeExchangeV1) Decode(decoder scale.Decoder) error {
+	if err := fe.AssetID.Decode(decoder); err != nil {
+		return err
+	}
+	return fe.MaxPayment.Decode(decoder)
 }

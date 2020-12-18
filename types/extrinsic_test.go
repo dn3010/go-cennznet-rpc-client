@@ -21,6 +21,7 @@ import (
 	"testing"
 
 	"github.com/centrifuge/go-substrate-rpc-client/signature"
+	"github.com/centrifuge/go-substrate-rpc-client/types"
 	. "github.com/centrifuge/go-substrate-rpc-client/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -79,8 +80,10 @@ func TestExtrinsic_Sign(t *testing.T) {
 		GenesisHash: NewHash(MustHexDecodeString("0xdcd1346701ca8396496e52aa2785b1748deb6db09551b72159dcb3e08991025b")),
 		Nonce:       NewUCompactFromUInt(1),
 		SpecVersion: 123,
-		Tip:         NewUCompactFromUInt(2),
-		TransactionVersion: 1,
+		TransactionPayment: types.TransactionPayment{
+			Tip:         NewUCompactFromUInt(2),
+			FeeExchange: types.OptionFeeExchange{HasValue: false},
+		},
 	}
 
 	assert.False(t, ext.IsSigned())
@@ -120,17 +123,15 @@ func TestExtrinsic_Sign(t *testing.T) {
 	mb, err := EncodeToBytes(extDec.Method)
 	assert.NoError(t, err)
 
-	verifyPayload := ExtrinsicPayloadV4{
-		ExtrinsicPayloadV3: ExtrinsicPayloadV3{
-			Method:      mb,
-			Era:         extDec.Signature.Era,
-			Nonce:       extDec.Signature.Nonce,
-			Tip:         extDec.Signature.Tip,
-			SpecVersion: o.SpecVersion,
-			GenesisHash: o.GenesisHash,
-			BlockHash:   o.BlockHash,
-		},
-		TransactionVersion: 1,
+	verifyPayload := ExtrinsicPayloadV1{
+		Method:             mb,
+		Era:                extDec.Signature.Era,
+		Nonce:              extDec.Signature.Nonce,
+		TransactionPayment: extDec.Signature.TransactionPayment,
+		SpecVersion:        o.SpecVersion,
+		TransactionVersion: 5,
+		GenesisHash:        o.GenesisHash,
+		BlockHash:          o.BlockHash,
 	}
 
 	// verify sig
@@ -147,7 +148,7 @@ func ExampleExtrinsic() {
 		panic(err)
 	}
 
-	c, err := NewCall(ExamplaryMetadataV4, "balances.transfer", bob, NewUCompactFromUInt(6969))
+	c, err := NewCall(ExamplaryMetadataV4, "GenericAsset.transfer", types.U32(16_001), bob, NewUCompactFromUInt(6969))
 	if err != nil {
 		panic(err)
 	}
@@ -165,7 +166,9 @@ func ExampleExtrinsic() {
 		GenesisHash: NewHash(MustHexDecodeString("0x81ad0bfe2a0bccd91d2e89852d79b7ff696d4714758e5f7c6f17ec7527e1f550")),
 		Nonce:       NewUCompactFromUInt(1),
 		SpecVersion: 170,
-		Tip:         NewUCompactFromUInt(0),
+		TransactionPayment: types.TransactionPayment{
+			Tip: NewUCompactFromUInt(0),
+		},
 	}
 
 	err = ext.Sign(signature.TestKeyringPairAlice, o)
