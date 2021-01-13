@@ -1,4 +1,4 @@
-module github.com/centrifuge/go-substrate-rpc-client
+module github.com/dn3010/go-cennznet-rpc-client
 
 go 1.15
 
