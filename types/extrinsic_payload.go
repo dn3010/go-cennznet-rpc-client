@@ -17,6 +17,7 @@
 package types
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/centrifuge/go-substrate-rpc-client/scale"
@@ -102,7 +103,7 @@ func (fe FeeExchange) Encode(encoder scale.Encoder) error {
 		return encoder.Encode(fe.AsFeeExchangeV1)
 	}
 
-	panic("Only FeeExchangeV1 is supported")
+	return errors.New("Only FeeExchangeV1 is supported")
 }
 
 func (fe *FeeExchange) Decode(decoder scale.Decoder) error {
