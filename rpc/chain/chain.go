@@ -17,7 +17,7 @@
 package chain
 
 import (
-	"github.com/centrifuge/go-substrate-rpc-client/v2/client"
+	"github.com/dn3010/go-cennznet-rpc-client/v2/client"
 )
 
 // Chain exposes methods for retrieval of chain data

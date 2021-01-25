@@ -19,7 +19,7 @@ package types
 import (
 	"fmt"
 
-	"github.com/centrifuge/go-substrate-rpc-client/v2/scale"
+	"github.com/dn3010/go-cennznet-rpc-client/v2/scale"
 )
 
 const MagicNumber uint32 = 0x6174656d

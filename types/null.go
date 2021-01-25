@@ -17,7 +17,7 @@
 package types
 
 import (
-	"github.com/centrifuge/go-substrate-rpc-client/v2/scale"
+	"github.com/dn3010/go-cennznet-rpc-client/v2/scale"
 )
 
 // Null is a type that does not contain anything (apart from null)

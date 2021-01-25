@@ -55,8 +55,8 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 WORKDIR $GOPATH
 
-RUN mkdir -p $GOPATH/src/github.com/centrifuge/go-substrate-rpc-client
-WORKDIR $GOPATH/src/github.com/centrifuge/go-substrate-rpc-client
+RUN mkdir -p $GOPATH/src/github.com/dn3010/go-cennznet-rpc-client
+WORKDIR $GOPATH/src/github.com/dn3010/go-cennznet-rpc-client
 COPY . .
 
 RUN make install

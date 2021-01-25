@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/centrifuge/go-substrate-rpc-client/v2/scale"
+	"github.com/dn3010/go-cennznet-rpc-client/v2/scale"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -19,7 +19,7 @@ package types
 import (
 	"fmt"
 
-	"github.com/centrifuge/go-substrate-rpc-client/v2/scale"
+	"github.com/dn3010/go-cennznet-rpc-client/v2/scale"
 )
 
 // EventBalancesEndowed is emitted when an account is created with some free balance

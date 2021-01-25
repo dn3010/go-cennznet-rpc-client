@@ -43,7 +43,7 @@ test-dockerized: 		## runs all tests in a docker container against the CENNZnet 
 test-e2e-deployed: export RPC_URL?=wss://serinus-5.kusama.network
 test-e2e-deployed: 		## runs only end-to-end (e2e) tests against a deployed testnet (defaults to Kusama CC2 (wss://serinus-5.kusama.network) if RPC_URL is not set)
 	@docker build . -t gsrpc-test
-	@docker run --rm -e RPC_URL -e TEST_PRIV_KEY gsrpc-test go test -v github.com/centrifuge/go-substrate-rpc-client/teste2e
+	@docker run --rm -e RPC_URL -e TEST_PRIV_KEY gsrpc-test go test -v github.com/dn3010/go-cennznet-rpc-client/teste2e
 
 run-cennznet-docker: 	## runs CENNZnet 1.2.2 Docker image, this can be used to run the tests
 	docker run -p 9933:9933 -p 9944:9944 -p 30333:30333 cennznet/cennznet:v1.2.2 --dev --rpc-external --ws-external

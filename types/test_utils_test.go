@@ -22,8 +22,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/centrifuge/go-substrate-rpc-client/v2/scale"
-	. "github.com/centrifuge/go-substrate-rpc-client/v2/types"
+	"github.com/dn3010/go-cennznet-rpc-client/v2/scale"
+	. "github.com/dn3010/go-cennznet-rpc-client/v2/types"
 	"github.com/stretchr/testify/assert"
 )
 

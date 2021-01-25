@@ -16,7 +16,7 @@
 
 package author
 
-import "github.com/centrifuge/go-substrate-rpc-client/v2/client"
+import "github.com/dn3010/go-cennznet-rpc-client/v2/client"
 
 // Author exposes methods for authoring of network items
 type Author struct {

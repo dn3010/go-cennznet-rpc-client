@@ -17,8 +17,8 @@
 package state
 
 import (
-	"github.com/centrifuge/go-substrate-rpc-client/v2/client"
-	"github.com/centrifuge/go-substrate-rpc-client/v2/types"
+	"github.com/dn3010/go-cennznet-rpc-client/v2/client"
+	"github.com/dn3010/go-cennznet-rpc-client/v2/types"
 )
 
 // GetRuntimeVersion returns the runtime version at the given block
