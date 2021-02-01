@@ -50,7 +50,7 @@ func Example_simpleConnect() {
 
 	fmt.Printf("You are connected to chain %v using %v v%v\n", chain, nodeName, nodeVersion)
 
-	// Output: You are connected to chain Development using Substrate Node v2.0.0-a200cdb9-x86_64-linux-gnu
+	// Output: You are connected to chain Development using CENNZnet Node v1.2.2-98dace3-x86_64-linux-gnu
 }
 
 func Example_listenToNewBlocks() {
@@ -240,8 +240,6 @@ func Example_makeASimpleTransfer() {
 		GenesisHash: genesisHash,
 		Nonce:       types.NewUCompactFromUInt(uint64(nonce)),
 		SpecVersion: rv.SpecVersion,
-		Tip:         types.NewUCompactFromUInt(0),
-		TransactionVersion: rv.TransactionVersion,
 	}
 
 	// Sign the transaction using Alice's default account
@@ -454,8 +452,6 @@ func Example_transactionWithEvents() {
 		GenesisHash: genesisHash,
 		Nonce:       types.NewUCompactFromUInt(uint64(nonce)),
 		SpecVersion: rv.SpecVersion,
-		Tip:         types.NewUCompactFromUInt(0),
-		TransactionVersion: rv.TransactionVersion,
 	}
 
 	fmt.Printf("Sending %v from %#x to %#x with nonce %v", amount, signature.TestKeyringPairAlice.PublicKey, bob.AsAccountID, nonce)

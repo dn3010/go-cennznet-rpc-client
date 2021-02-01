@@ -93,7 +93,7 @@ func TestChain_SubmitExtrinsic(t *testing.T) {
 		panic(err)
 	}
 
-	c, err := types.NewCall(meta, "Balances.transfer", bob, types.NewUCompactFromUInt(6969))
+	c, err := types.NewCall(meta, "GenericAsset.transfer", types.U32(16_001), bob, types.NewUCompactFromUInt(6969))
 	if err != nil {
 		panic(err)
 	}
@@ -124,7 +124,7 @@ func TestChain_SubmitExtrinsic(t *testing.T) {
 
 	var accountInfo types.AccountInfo
 	ok, err = api.RPC.State.GetStorageLatest(key, &accountInfo)
-	if err != nil || !ok {
+	if err != nil {
 		panic(err)
 	}
 
@@ -138,8 +138,10 @@ func TestChain_SubmitExtrinsic(t *testing.T) {
 			GenesisHash: genesisHash,
 			Nonce:       types.NewUCompactFromUInt(uint64(nonce + i)),
 			SpecVersion: rv.SpecVersion,
-			Tip:         types.NewUCompactFromUInt(0),
-			TransactionVersion: rv.TransactionVersion,
+			TransactionPayment: types.TransactionPayment{
+				Tip:         types.NewUCompactFromUInt(0),
+				FeeExchange: types.OptionFeeExchange{HasValue: false},
+			},
 		}
 
 		extI := ext
