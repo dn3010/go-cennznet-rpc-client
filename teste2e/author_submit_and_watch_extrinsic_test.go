@@ -81,7 +81,7 @@ func TestAuthor_SubmitAndWatchExtrinsic(t *testing.T) {
 	}
 
 	var accountInfo types.AccountInfo
-	ok, err = api.RPC.State.GetStorageLatest(key, &accountInfo)
+	_, err = api.RPC.State.GetStorageLatest(key, &accountInfo)
 	if err != nil {
 		panic(err)
 	}
