@@ -1,0 +1,13 @@
+version: 2.1
+jobs:
+  build:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/bin
+      - run:
+          name: Run Test Suite
+          command: |
+            make test-dockerized
