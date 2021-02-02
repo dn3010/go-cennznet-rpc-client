@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/centrifuge/go-substrate-rpc-client/signature"
-	"github.com/centrifuge/go-substrate-rpc-client/types"
-	. "github.com/centrifuge/go-substrate-rpc-client/types"
+	"github.com/centrifuge/go-substrate-rpc-client/v2/signature"
+	"github.com/centrifuge/go-substrate-rpc-client/v2/types"
+	. "github.com/centrifuge/go-substrate-rpc-client/v2/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -137,7 +137,7 @@ func TestExtrinsic_Sign(t *testing.T) {
 	// verify sig
 	b, err := EncodeToBytes(verifyPayload)
 	assert.NoError(t, err)
-	ok, err := signature.Verify(b, extDec.Signature.Signature.AsSr25519[:], HexEncodeToString(signature.TestKeyringPairAlice.PublicKey))
+	ok, err := signature.Verify(b, extDec.Signature.Signature.AsSr25519[:], signature.TestKeyringPairAlice.URI)
 	assert.NoError(t, err)
 	assert.True(t, ok)
 }
