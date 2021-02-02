@@ -173,6 +173,16 @@ func (i U128) MarshalJSON() ([]byte, error) {
 	return []byte("\"" + hex + "\""), nil
 }
 
+// UnmarshalJSON by turning the hex encoded string into an unsigned 128 bit integer
+func (i *U128) UnmarshalJSON(data []byte) error {
+	rawString := ""
+	if err := json.Unmarshal(data, &rawString); err != nil {
+		return err
+	}
+
+	return DecodeFromHexString(rawString, i)
+}
+
 // U256 is an usigned 256-bit integer, it is represented as a big.Int in Go.
 type U256 struct {
 	*big.Int
@@ -228,6 +238,16 @@ func (i U256) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 	return []byte("\"" + hex + "\""), nil
+}
+
+// UnmarshalJSON by turning the hex encoded string into a 256 bit unsigned integer
+func (i *U256) UnmarshalJSON(data []byte) error {
+	rawString := ""
+	if err := json.Unmarshal(data, &rawString); err != nil {
+		return err
+	}
+
+	return DecodeFromHexString(rawString, i)
 }
 
 // BigIntToUintBytes encodes the given big.Int to a big endian encoded unsigned integer byte slice of the given byte
