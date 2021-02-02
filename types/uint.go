@@ -173,6 +173,18 @@ func (i U128) MarshalJSON() ([]byte, error) {
 	return []byte("\"" + hex + "\""), nil
 }
 
+// UnmarshalJSON fills u with the JSON encoded byte array given by b
+func (u *U128) UnmarshalJSON(b []byte) error {
+	tmp := big.NewInt(0)
+	if err := json.Unmarshal(b, &tmp); err != nil {
+		return err
+	}
+	*u = U128{
+		Int: tmp,
+	}
+	return nil
+}
+
 // U256 is an usigned 256-bit integer, it is represented as a big.Int in Go.
 type U256 struct {
 	*big.Int
