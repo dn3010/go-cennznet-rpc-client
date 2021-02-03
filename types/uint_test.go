@@ -328,6 +328,19 @@ func TestU128_Eq(t *testing.T) {
 	})
 }
 
+func TestU128_JsonEncode(t *testing.T) {
+	u128 := NewU128(*big.NewInt(171))
+	bytes, err := json.Marshal(u128)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if string(bytes) != "\"0xab\"" {
+		t.Errorf("171 was encoded to JSON as %s when it should've been \"0xab\"", string(bytes))
+		return
+	}
+}
+
 func TestU128_JsonEncodeDecode(t *testing.T) {
 	u128 := NewU128(*big.NewInt(1234))
 	bytes, err := json.Marshal(u128)
@@ -419,6 +432,19 @@ func TestU256_Eq(t *testing.T) {
 		{NewU256(*big.NewInt(23)), NewU64(23), false},
 		{NewU256(*big.NewInt(23)), NewBool(false), false},
 	})
+}
+
+func TestU256_JsonEncode(t *testing.T) {
+	u256 := NewU256(*big.NewInt(171))
+	bytes, err := json.Marshal(u256)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if string(bytes) != "\"0xab\"" {
+		t.Errorf("171 was encoded to JSON as %s when it should've been \"0xab\"", string(bytes))
+		return
+	}
 }
 
 func TestU256_JsonEncodeDecode(t *testing.T) {
