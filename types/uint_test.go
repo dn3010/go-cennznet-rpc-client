@@ -18,6 +18,7 @@ package types_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"math/big"
 	"testing"
 
@@ -327,6 +328,37 @@ func TestU128_Eq(t *testing.T) {
 	})
 }
 
+func TestU128_JsonEncode(t *testing.T) {
+	u128 := NewU128(*big.NewInt(171))
+	bytes, err := json.Marshal(u128)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if string(bytes) != "\"0xab\"" {
+		t.Errorf("171 was encoded to JSON as %s when it should've been \"0xab\"", string(bytes))
+		return
+	}
+}
+
+func TestU128_JsonEncodeDecode(t *testing.T) {
+	u128 := NewU128(*big.NewInt(1234))
+	bytes, err := json.Marshal(u128)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	newU128 := NewU128(*big.NewInt(0))
+	if err = json.Unmarshal(bytes, &newU128); err != nil {
+		t.Error(err)
+		return
+	}
+	if newU128.Cmp(big.NewInt(1234)) != 0 {
+		t.Errorf("Encoded and decoded values do not match: Expected `%d`, got `%d`.", u128.Int, newU128.Int)
+		return
+	}
+}
+
 func TestU256_EncodeDecode(t *testing.T) {
 	assertRoundtrip(t, NewU256(*big.NewInt(0)))
 	assertRoundtrip(t, NewU256(*big.NewInt(12)))
@@ -400,6 +432,37 @@ func TestU256_Eq(t *testing.T) {
 		{NewU256(*big.NewInt(23)), NewU64(23), false},
 		{NewU256(*big.NewInt(23)), NewBool(false), false},
 	})
+}
+
+func TestU256_JsonEncode(t *testing.T) {
+	u256 := NewU256(*big.NewInt(171))
+	bytes, err := json.Marshal(u256)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if string(bytes) != "\"0xab\"" {
+		t.Errorf("171 was encoded to JSON as %s when it should've been \"0xab\"", string(bytes))
+		return
+	}
+}
+
+func TestU256_JsonEncodeDecode(t *testing.T) {
+	u256 := NewU256(*big.NewInt(1234))
+	bytes, err := json.Marshal(u256)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	newU256 := NewU256(*big.NewInt(0))
+	if err = json.Unmarshal(bytes, &newU256); err != nil {
+		t.Error(err)
+		return
+	}
+	if newU256.Cmp(big.NewInt(1234)) != 0 {
+		t.Errorf("Encoded and decoded values do not match: Expected `%d`, got `%d`.", u256.Int, newU256.Int)
+		return
+	}
 }
 
 func TestBigIntToUintBytes(t *testing.T) {

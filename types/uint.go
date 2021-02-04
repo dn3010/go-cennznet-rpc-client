@@ -17,6 +17,7 @@
 package types
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"math/big"
@@ -166,11 +167,23 @@ func (i U128) Encode(encoder scale.Encoder) error {
 
 // MarshalJSON by turning the unsigned 128 bit number into a hex encoded string
 func (i U128) MarshalJSON() ([]byte, error) {
-	hex, err := EncodeToHexString(&i)
-	if err != nil {
-		return nil, err
+	hexString := hex.EncodeToString(i.Int.Bytes())
+	return []byte("\"0x" + hexString + "\""), nil
+}
+
+// UnmarshalJSON by turning the hex encoded string into an unsigned 128 bit integer
+func (i *U128) UnmarshalJSON(data []byte) error {
+	rawString := ""
+	json.Unmarshal(data, &rawString)
+	if rawString[:2] == "0x" {
+		rawString = rawString[2:]
 	}
-	return []byte("\"" + hex + "\""), nil
+	bytes, err := hex.DecodeString(rawString)
+	if err != nil {
+		return err
+	}
+	i.SetBytes(bytes)
+	return nil
 }
 
 // U256 is an usigned 256-bit integer, it is represented as a big.Int in Go.
@@ -223,11 +236,23 @@ func (i U256) Encode(encoder scale.Encoder) error {
 
 // MarshalJSON by turning the unsigned 128 bit number into a hex encoded string
 func (i U256) MarshalJSON() ([]byte, error) {
-	hex, err := EncodeToHexString(&i)
-	if err != nil {
-		return nil, err
+	hexString := hex.EncodeToString(i.Int.Bytes())
+	return []byte("\"0x" + hexString + "\""), nil
+}
+
+// UnmarshalJSON by turning the hex encoded string into a 256 bit unsigned integer
+func (i *U256) UnmarshalJSON(data []byte) error {
+	rawString := ""
+	json.Unmarshal(data, &rawString)
+	if rawString[:2] == "0x" {
+		rawString = rawString[2:]
 	}
-	return []byte("\"" + hex + "\""), nil
+	bytes, err := hex.DecodeString(rawString)
+	if err != nil {
+		return err
+	}
+	i.SetBytes(bytes)
+	return nil
 }
 
 // BigIntToUintBytes encodes the given big.Int to a big endian encoded unsigned integer byte slice of the given byte
